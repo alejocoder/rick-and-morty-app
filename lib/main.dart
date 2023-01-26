@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:test_tecnico_rick_morty/providers/API_provider.dart';
 import 'package:test_tecnico_rick_morty/providers/bottom_nav_provider.dart';
 import 'package:test_tecnico_rick_morty/screens/screens.dart';
 
@@ -15,7 +16,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => BottomNavProvider()),
+        ChangeNotifierProvider(
+          create: (_) => BottomNavProvider(),
+          lazy: false,
+        ),
+        ChangeNotifierProvider(
+          create: (_) => ApiProvider(),
+          lazy: false,
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
