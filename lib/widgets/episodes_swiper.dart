@@ -1,25 +1,28 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:test_tecnico_rick_morty/models/episodes_response.dart';
 
 class EpisodesSwiper extends StatelessWidget {
-  const EpisodesSwiper({super.key});
+  final List<Episode> episodes;
+  const EpisodesSwiper({super.key, required this.episodes});
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           width: double.infinity,
-          height: size.height * 0.85,
+          height: size.height * 0.6,
           child: Swiper(
-            itemCount: 10,
+            itemCount: episodes.length,
             layout: SwiperLayout.STACK,
             itemWidth: size.width * 1,
             itemHeight: size.height * 1,
             itemBuilder: (_, index) {
-              return const EpisodesCard();
+              final episode = episodes[index];
+              return EpisodesCard(episodes: episode);
             },
           ),
         ),
@@ -29,8 +32,10 @@ class EpisodesSwiper extends StatelessWidget {
 }
 
 class EpisodesCard extends StatelessWidget {
+  final Episode episodes;
   const EpisodesCard({
     Key? key,
+    required this.episodes,
   }) : super(key: key);
 
   @override
@@ -49,35 +54,31 @@ class EpisodesCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: const FadeInImage(
-                    placeholder: AssetImage('assets/no-image.jpg'),
-                    image: AssetImage('assets/no-image.jpg'),
-                    height: 400,
-                  ),
-                ),
                 const SizedBox(
                   width: 10,
                 ),
                 ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 220),
+                  constraints: const BoxConstraints(maxWidth: 450),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
                       Text(
-                        'name',
-                        style: TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
+                        episodes.name,
+                        style: const TextStyle(
+                            fontSize: 40, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 3,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       Text(
-                        'status',
-                        style: TextStyle(fontSize: 20),
+                        'the episode air date is: ${episodes.airDate}',
+                        style: const TextStyle(fontSize: 20),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
@@ -87,36 +88,17 @@ class EpisodesCard extends StatelessWidget {
               ],
             ),
             const SizedBox(
-              height: 30,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: const [
-                Text(
-                  'is a gender species',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            const SizedBox(
-              height: 10,
+              height: 80,
             ),
             const Text(
-              'the type is type',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(
-              height: 30,
-            ),
-            const Text(
-              'the origin location is:',
+              'the episode code is:',
               style: TextStyle(
                 fontSize: 30,
               ),
             ),
-            const Text(
-              'Earth (Replacement Dimension)',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            Text(
+              episodes.episode,
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
             ),
@@ -124,14 +106,14 @@ class EpisodesCard extends StatelessWidget {
               height: 30,
             ),
             const Text(
-              'the current location is:',
+              'the episode id is:',
               style: TextStyle(
                 fontSize: 20,
               ),
             ),
-            const Text(
-              'Testicle Monster Dimension',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            Text(
+              episodes.id.toString(),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
             ),

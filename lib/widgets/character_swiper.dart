@@ -78,14 +78,14 @@ class CharacterCard extends StatelessWidget {
                     children: [
                       Text(
                         characters.name,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,
                       ),
                       Text(
                         characters.status.name,
-                        style: TextStyle(fontSize: 20),
+                        style: const TextStyle(fontSize: 20),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                       ),
@@ -102,7 +102,7 @@ class CharacterCard extends StatelessWidget {
               children: [
                 Text(
                   'is a ${characters.gender.name} ${characters.species.name}',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -124,7 +124,7 @@ class CharacterCard extends StatelessWidget {
             ),
             Text(
               characters.origin.name,
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
             ),
@@ -139,7 +139,7 @@ class CharacterCard extends StatelessWidget {
             ),
             Text(
               characters.location.name,
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
             ),
