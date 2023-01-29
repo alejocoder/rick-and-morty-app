@@ -1,11 +1,12 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:test_tecnico_rick_morty/models/episodes_response.dart';
+import 'package:test_tecnico_rick_morty/models/locations_response.dart';
+import 'package:test_tecnico_rick_morty/models/models.dart';
 
-class EpisodesSwiper extends StatelessWidget {
-  final List<Episode> episodes;
-  const EpisodesSwiper({super.key, required this.episodes});
+class LocationsSwiper extends StatelessWidget {
+  final List<Locacion> locations;
+  const LocationsSwiper({super.key, required this.locations});
 
   @override
   Widget build(BuildContext context) {
@@ -17,13 +18,13 @@ class EpisodesSwiper extends StatelessWidget {
           width: double.infinity,
           height: size.height * 0.6,
           child: Swiper(
-            itemCount: episodes.length,
+            itemCount: locations.length,
             layout: SwiperLayout.STACK,
             itemWidth: size.width * 1,
             itemHeight: size.height * 1,
             itemBuilder: (_, index) {
-              final episode = episodes[index];
-              return EpisodesCard(episodes: episode);
+              final location = locations[index];
+              return LocationsCard(locations: location);
             },
           ),
         ),
@@ -32,32 +33,32 @@ class EpisodesSwiper extends StatelessWidget {
   }
 }
 
-class EpisodesCard extends StatefulWidget {
-  final Episode episodes;
-  const EpisodesCard({
+class LocationsCard extends StatefulWidget {
+  final Locacion locations;
+  const LocationsCard({
     Key? key,
-    required this.episodes,
+    required this.locations,
   }) : super(key: key);
 
   @override
-  State<EpisodesCard> createState() => _EpisodesCardState();
+  State<LocationsCard> createState() => _LocationsCardState();
 }
 
-class _EpisodesCardState extends State<EpisodesCard> {
+class _LocationsCardState extends State<LocationsCard> {
   late SharedPreferences prefs;
   bool isLiked = false;
 
   Future initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    final likedEpisodes = prefs.getStringList('likedEpisodes');
-    if (likedEpisodes != null) {
-      if (likedEpisodes.contains(widget.episodes.id.toString()) == true) {
+    final likedLocations = prefs.getStringList('likedLocations');
+    if (likedLocations != null) {
+      if (likedLocations.contains(widget.locations.id.toString()) == true) {
         setState(() {
           isLiked = true;
         });
       }
     } else {
-      await prefs.setStringList('likedEpisodes', []);
+      await prefs.setStringList('likedLocations', []);
     }
   }
 
@@ -68,14 +69,14 @@ class _EpisodesCardState extends State<EpisodesCard> {
   }
 
   onHeartTap() async {
-    final likedEpisodes = prefs.getStringList('likedEpisodes');
-    if (likedEpisodes != null) {
+    final likedLocations = prefs.getStringList('likedLocations');
+    if (likedLocations != null) {
       if (isLiked) {
-        likedEpisodes.remove(widget.episodes.id.toString());
+        likedLocations.remove(widget.locations.id.toString());
       } else {
-        likedEpisodes.add(widget.episodes.id.toString());
+        likedLocations.add(widget.locations.id.toString());
       }
-      await prefs.setStringList('likedEpisodes', likedEpisodes);
+      await prefs.setStringList('likedLocations', likedLocations);
       setState(() {
         isLiked = !isLiked;
       });
@@ -110,7 +111,7 @@ class _EpisodesCardState extends State<EpisodesCard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Text(
-                        widget.episodes.name,
+                        widget.locations.name,
                         style: const TextStyle(
                             fontSize: 40, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
@@ -121,7 +122,7 @@ class _EpisodesCardState extends State<EpisodesCard> {
                         height: 20,
                       ),
                       Text(
-                        'the episode air date is: ${widget.episodes.airDate}',
+                        'the type is: ${widget.locations.type}',
                         style: const TextStyle(fontSize: 20),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -135,13 +136,13 @@ class _EpisodesCardState extends State<EpisodesCard> {
               height: 80,
             ),
             const Text(
-              'the episode code is:',
+              'the dimension is:',
               style: TextStyle(
                 fontSize: 30,
               ),
             ),
             Text(
-              widget.episodes.episode,
+              widget.locations.dimension,
               style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
@@ -156,7 +157,7 @@ class _EpisodesCardState extends State<EpisodesCard> {
               ),
             ),
             Text(
-              widget.episodes.id.toString(),
+              widget.locations.id.toString(),
               style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,

@@ -11,7 +11,7 @@ class CharacterScreen extends StatelessWidget {
     final characterProvider = Provider.of<ApiProvider>(context);
 
     return Center(
-      child: CharacterSwiper( characters: characterProvider.characters),
+      child: CharacterSwiper(characters: characterProvider.characters),
     );
   }
 }

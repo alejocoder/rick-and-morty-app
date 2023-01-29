@@ -6,11 +6,9 @@ import 'dart:convert';
 
 class EpisodesResponse {
   EpisodesResponse({
-    required this.info,
     required this.results,
   });
 
-  Info info;
   List<Episode> results;
 
   factory EpisodesResponse.fromRawJson(String str) =>
@@ -20,46 +18,12 @@ class EpisodesResponse {
 
   factory EpisodesResponse.fromJson(Map<String, dynamic> json) =>
       EpisodesResponse(
-        info: Info.fromJson(json["info"]),
         results:
             List<Episode>.from(json["results"].map((x) => Episode.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "info": info.toJson(),
         "results": List<dynamic>.from(results.map((x) => x.toJson())),
-      };
-}
-
-class Info {
-  Info({
-    required this.count,
-    required this.pages,
-    required this.next,
-    this.prev,
-  });
-
-  int count;
-  int pages;
-  String next;
-  dynamic prev;
-
-  factory Info.fromRawJson(String str) => Info.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory Info.fromJson(Map<String, dynamic> json) => Info(
-        count: json["count"],
-        pages: json["pages"],
-        next: json["next"],
-        prev: json["prev"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "count": count,
-        "pages": pages,
-        "next": next,
-        "prev": prev,
       };
 }
 

@@ -6,11 +6,10 @@ import 'dart:convert';
 
 class CharacterResponse {
   CharacterResponse({
-    required this.info,
     required this.results,
   });
 
-  Info info;
+
   List<Character> results;
 
   factory CharacterResponse.fromRawJson(String str) =>
@@ -18,34 +17,12 @@ class CharacterResponse {
 
   factory CharacterResponse.fromJson(Map<String, dynamic> json) =>
       CharacterResponse(
-        info: Info.fromJson(json["info"]),
+
         results: List<Character>.from(
             json["results"].map((x) => Character.fromJson(x))),
       );
 }
 
-class Info {
-  Info({
-    required this.count,
-    required this.pages,
-    required this.next,
-    this.prev,
-  });
-
-  int count;
-  int pages;
-  String next;
-  dynamic prev;
-
-  factory Info.fromRawJson(String str) => Info.fromJson(json.decode(str));
-
-  factory Info.fromJson(Map<String, dynamic> json) => Info(
-        count: json["count"],
-        pages: json["pages"],
-        next: json["next"],
-        prev: json["prev"],
-      );
-}
 
 class Character {
   Character({

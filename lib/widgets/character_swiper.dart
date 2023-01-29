@@ -1,5 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_tecnico_rick_morty/models/characters_response.dart';
 
 class CharacterSwiper extends StatelessWidget {
@@ -33,13 +34,56 @@ class CharacterSwiper extends StatelessWidget {
   }
 }
 
-class CharacterCard extends StatelessWidget {
+class CharacterCard extends StatefulWidget {
   final Character characters;
 
   const CharacterCard({
     Key? key,
     required this.characters,
   }) : super(key: key);
+
+  @override
+  State<CharacterCard> createState() => _CharacterCardState();
+}
+
+class _CharacterCardState extends State<CharacterCard> {
+  late SharedPreferences prefs;
+  bool isLiked = false;
+
+  Future initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    final likedCharacters = prefs.getStringList('likedCharacters');
+    if (likedCharacters != null) {
+      if (likedCharacters.contains(widget.characters.id.toString()) == true) {
+        setState(() {
+          isLiked = true;
+        });
+      }
+    } else {
+      await prefs.setStringList('likedCharacters', []);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
+
+  onHeartTap() async {
+    final likedCharacters = prefs.getStringList('likedCharacters');
+    if (likedCharacters != null) {
+      if (isLiked) {
+        likedCharacters.remove(widget.characters.id.toString());
+      } else {
+        likedCharacters.add(widget.characters.id.toString());
+      }
+      await prefs.setStringList('likedCharacters', likedCharacters);
+      setState(() {
+        isLiked = !isLiked;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +107,7 @@ class CharacterCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   child: FadeInImage(
                     placeholder: const AssetImage('assets/no-image.jpg'),
-                    image: NetworkImage(characters.image),
+                    image: NetworkImage(widget.characters.image),
                     height: 300,
                   ),
                 ),
@@ -77,14 +121,14 @@ class CharacterCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        characters.name,
+                        widget.characters.name,
                         style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 4,
                       ),
                       Text(
-                        characters.status.name,
+                        widget.characters.status.name,
                         style: const TextStyle(fontSize: 20),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -101,8 +145,9 @@ class CharacterCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text(
-                  'is a ${characters.gender.name} ${characters.species.name}',
-                  style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  'is a ${widget.characters.gender.name} ${widget.characters.species.name}',
+                  style: const TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -110,7 +155,7 @@ class CharacterCard extends StatelessWidget {
               height: 10,
             ),
             Text(
-              'the type is ${(characters.type.length > 2) ? characters.type : 'not specified'}',
+              'the type is ${(widget.characters.type.length > 2) ? widget.characters.type : 'not specified'}',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(
@@ -123,7 +168,7 @@ class CharacterCard extends StatelessWidget {
               ),
             ),
             Text(
-              characters.origin.name,
+              widget.characters.origin.name,
               style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
@@ -138,7 +183,7 @@ class CharacterCard extends StatelessWidget {
               ),
             ),
             Text(
-              characters.location.name,
+              widget.characters.location.name,
               style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               overflow: TextOverflow.ellipsis,
               maxLines: 3,
@@ -147,9 +192,9 @@ class CharacterCard extends StatelessWidget {
               height: 80,
             ),
             ElevatedButton.icon(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.favorite,
+              onPressed: onHeartTap,
+              icon: Icon(
+                isLiked ? Icons.favorite : Icons.favorite_outline,
                 size: 45,
               ),
               label: const Text(
